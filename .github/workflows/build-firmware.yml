@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       config_seed:
-        description: 'Build config'
+        description: 'Build config (1710.config=XR1710G / 2010.config=XG2010G)'  # forked by Hermes
         required: true
         default: '1710.config'
         type: choice
