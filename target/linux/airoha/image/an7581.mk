@@ -237,7 +237,7 @@ define Device/gemtek_xg2010g-ubi
 	kmod-airoha-pon-dataplane kmod-airoha-xpon-igmp \
 	kmod-airoha-gpon-igmp \
 	kmod-airoha-tod \
-	kmod-airoha-en7581-pcm-spi \
+	-kmod-airoha-en7581-pcm-spi \
 	airoha-pon-firmware airoha-pon-manager \
 	-airoha-an7581-mt7996-board -airoha-en7581-mt7996-npu-firmware \
 	-kmod-mac80211 -kmod-mt7996-firmware -kmod-mt7996e \
