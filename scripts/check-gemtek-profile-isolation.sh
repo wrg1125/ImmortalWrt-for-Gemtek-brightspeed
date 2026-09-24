@@ -71,7 +71,6 @@ elif grep -qx 'CONFIG_TARGET_airoha_an7581_DEVICE_gemtek_xg2010g-ubi=y' "$config
 		kmod-airoha-pon-dataplane
 		kmod-airoha-xpon-igmp
 		kmod-airoha-gpon-igmp
-		kmod-airoha-en7581-pcm-spi
 	)
 	manifest_required_packages=("${required_packages[@]}" kmod-airoha-tod)
 	forbidden_kernel='CONFIG_MT(76|7996).*=(y|m)'
