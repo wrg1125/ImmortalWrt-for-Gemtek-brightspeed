@@ -1,6 +1,6 @@
 <img src="https://avatars.githubusercontent.com/u/53193414?s=200&v=4" alt="logo" width="200" height="200" align="right">
 
-# ImmortalWrt-for-Gemtek-brightspeed
+# ImmortalWrt-for-Gemtek-brightspeed XR1710G & XG2010G
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/naoki66/ImmortalWrt-for-Gemtek-brightspeed/build-firmware.yml?branch=master&label=Build)](https://github.com/naoki66/ImmortalWrt-for-Gemtek-brightspeed/actions/workflows/build-firmware.yml)
 [![Sync Status](https://img.shields.io/github/actions/workflow/status/naoki66/ImmortalWrt-for-Gemtek-brightspeed/sync-upstream.yml?branch=master&label=Sync)](https://github.com/naoki66/ImmortalWrt-for-Gemtek-brightspeed/actions/workflows/sync-upstream.yml)
@@ -18,14 +18,14 @@ XR1710G 与 XG2010G 设备维护的 Airoha AN7581 固件项目。
 当前维护两个相互隔离的硬件配置：
 
 - **XR1710G**：Brightspeed 10G Wi-Fi 7 路由器，使用 `1710.config`，包含 MT7996 无线、NPU 和 RTL8261BE 以太网支持。
-- **XG2010G**：10G XG(S)-PON 网关，使用 `2010.config`， 使用 EN7581 xPON 软件包,NPU 和 RTL8261BE 以太网支持。
+- **XG2010G**：Brightspeed 10G XG(S)-PON/XE-PON  网关，使用 `2010.config`， 使用 EN7581 xPON 软件包,NPU 和 RTL8261BE 以太网支持。
 
 ## 支持设备
 
 | 设备 | 构建配置 | 当前定位 | 设备树/镜像 |
 |------|----------|----------|------------|
 | Brightspeed/Gemtek XR1710G | [`1710.config`](1710.config) | Wi-Fi 7 路由器固件 | [`an7581-xr1710g-ubi.dts`](target/linux/airoha/dts/an7581-xr1710g-ubi.dts) |
-| Gemtek XG2010G | [`2010.config`](2010.config) | XG(S)-PON 网关移植基线 | [`an7581-gemtek-xg2010g-ubi.dts`](target/linux/airoha/dts/an7581-gemtek-xg2010g-ubi.dts) |
+| Brightspeed/Gemtek XG2010G | [`2010.config`](2010.config) | XG(S)-PON 网关移植基线 | [`an7581-gemtek-xg2010g-ubi.dts`](target/linux/airoha/dts/an7581-gemtek-xg2010g-ubi.dts) |
 
 ### XR1710G
 
@@ -68,6 +68,8 @@ XG2010G 与 XR1710G 同属 Airoha AN7581 平台，但硬件布局和软件包集
 - 使用 Airoha `an7581` 目标和独立的 `gemtek_xg2010g-ubi` 镜像配置。
 - `2010.config` 只选择 XG2010G 的 xPON、PON dataplane、TOD 和 EN7581 PCM-SPI 相关软件包，并通过 [profile isolation 检查](scripts/check-gemtek-profile-isolation.sh) 拒绝混入 XR1710G 的 Wi-Fi 软件包。
 - 设备树禁用当前没有足够硬件证据的 PCIe、USB 和 eMMC，保留 EN7581 xPON、PON PHY、TOD、I2C 和 PCM-SPI 相关节点。
+- 语音控制路径按原厂 5.4 固件的 `slic3_silicon`/`pcm1`/`spi` 模块序列恢复：XG2010G 设备树启用 EN7581 AFE，PCM 控制器初始化为 2 路 8-bit timeslot，并提供 25 帧 TX/RX DMA 环和 `/dev/pcm1` 20 ms 帧读写口。
+- PCM-SPI 节点提供 Si32192 身份探测、片选状态、PCM/SLIC 原始寄存器读写、2 路 FXS 的 linefeed 状态和 hook 状态读取（`identity`、`rescan`、`chip_select`、`raw_register`、`pcm_register`、`line_state`、`hook_state`）。
 - 镜像使用 XG2010G 专用 UBI 布局：`ubi` 分区从 `0x00600000` 开始，`fit` volume 位于该 UBI 分区内。
 
 #### 刷写和验证边界
